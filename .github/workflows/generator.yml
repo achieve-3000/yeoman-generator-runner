@@ -1,0 +1,44 @@
+name: "generator"
+on:
+  repository_dispatch:
+    types: [generate]
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+    -
+      uses: actions/checkout@v2
+    -
+      name: Configure git token
+      run: |
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+    -
+      uses: ./
+      with:
+        generator: webapp
+        cwd: examples/webapp
+        package: generator-webapp
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        untracked-files: |
+          [
+            "app/**/*.js",
+            "app/**/*.css",
+            "test/*.html",
+            "test/spec/*.js",
+            "package.json"
+          ]
+        git-config: |
+          {
+            "user.name": "github-actions",
+            "user.email": "github-actions@github.com"
+          }
+        answers: |
+          {
+            "ui": "bdd",
+            "rjs": false,
+            "features": [],
+            "includeJQuery": false
+          }

@@ -1,10 +1,55 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: 'Yeoman generator runner'
+description: 'Runs a Yeoman generator and send a pull request when changes are detected'
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  generator:
+    description: 'Yeoman generator'
     required: true
-    default: '1000'
+  package:
+    description: 'Node package containing the yeoman generator'
+    required: true
+  untracked-files:
+    description: 'Contains files or directories to ignore'
+    required: false
+    default: ''
+  skip-install:
+    description: 'Do not automatically install dependencies'
+    required: true
+    default: "true"
+  answers:
+    description: 'Yeoman generator answers'
+    required: true
+    default: '{}'
+  options:
+    description: 'Yeoman generator options'
+    required: true
+    default: '{}'
+  cwd:
+    description: 'Yeoman working directory'
+    required: true
+    default: '.'
+  git-config:
+    description: 'Git config'
+    required: false
+    default: '{}'
+  github-token:
+    description: 'Github token'
+    required: false
+  github-pr-commit-message:
+    description: 'Message to use when commiting files that changed after the generator run'
+    required: false
+    default: ''
+  github-pr-branch:
+    description: 'Git branch used to submit a pr when changes are detected'
+    required: false
+    default: ''
+  github-pr-title:
+    description: 'Github PR title used to submit changes'
+    required: false
+    default: ''
+  github-pr-body:
+    description: 'Github PR body used to submit changes'
+    required: false
+    default: ''
 outputs:
   time: # output will be available to future steps
     description: 'The message to output'
