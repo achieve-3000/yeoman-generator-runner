@@ -12,16 +12,11 @@ jobs:
     -
       uses: actions/checkout@v2
     -
-      name: Configure git token
-      run: |
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-    -
       uses: ./
       with:
         generator: webapp
         cwd: examples/webapp
         package: generator-webapp
-        github-token: ${{ secrets.GITHUB_TOKEN }}
         untracked-files: |
           [
             "app/**/*.js",
@@ -30,11 +25,6 @@ jobs:
             "test/spec/*.js",
             "package.json"
           ]
-        git-config: |
-          {
-            "user.name": "github-actions",
-            "user.email": "github-actions@github.com"
-          }
         answers: |
           {
             "ui": "bdd",

@@ -14,7 +14,7 @@ inputs:
   skip-install:
     description: 'Do not automatically install dependencies'
     required: true
-    default: "true"
+    default: 'true'
   answers:
     description: 'Yeoman generator answers'
     required: true
@@ -27,13 +27,26 @@ inputs:
     description: 'Yeoman working directory'
     required: true
     default: '.'
+  npm-sudo:
+    description: 'Run npm as sudo'
+    required: true
+    default: 'true'
   git-config:
     description: 'Git config'
+    required: true
+    default: |
+      {
+        "user.name": "github-actions",
+        "user.email": "github-actions@github.com"
+      }
+  git-remote-origin-url:
+    description: 'Git remove origing url'
     required: false
-    default: '{}'
+    default: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
   github-token:
     description: 'Github token'
-    required: false
+    default: '${{ secrets.GITHUB_TOKEN }}'
+    required: true
   github-pr-commit-message:
     description: 'Message to use when commiting files that changed after the generator run'
     required: false

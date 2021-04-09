@@ -24,11 +24,16 @@ async function globFiles(pattern: string): Promise<string[]> {
 }
 
 export async function configure(): Promise<number[]> {
+  const originUrl = input.getInput('git-remote-origin-url')
   const config = input.getGitConfigInput()
   const codes = []
 
   for (const [key, value] of Object.entries(config)) {
     codes.push(await exec.exec('git config --global', [key, value]))
+  }
+
+  if (originUrl) {
+    codes.push(await exec.exec('git remote set-url origin', [originUrl]))
   }
 
   return Promise.resolve(codes)

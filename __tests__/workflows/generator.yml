@@ -14,11 +14,6 @@ jobs:
       with:
         path: "yeoman-generator-runner"
     -
-      name: Configure git token
-      run: |
-        cd yeoman-generator-runner
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-    -
       uses: ./
       with:
         generator: webapp
@@ -33,11 +28,6 @@ jobs:
             "test/spec/*.js",
             "package.json"
           ]
-        git-config: |
-          {
-            "user.name": "github-actions",
-            "user.email": "github-actions@github.com"
-          }
         answers: |
           {
             "ui": "bdd",
