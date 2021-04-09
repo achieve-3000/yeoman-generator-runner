@@ -21,7 +21,7 @@ export async function installDependencies(
   const packages = core.getInput('package')
 
   core.info(`Instaling ${packages}`)
-  await exec.exec('npm', ['install', packages, '--global', '--quiet'])
+  await exec.exec('sudo npm', ['install', packages, '--global', '--quiet'])
 
   core.info(`Indexing generators`)
   return env.lookup()
