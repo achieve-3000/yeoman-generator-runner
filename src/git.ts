@@ -102,3 +102,15 @@ export async function excludeUntrackedFiles(): Promise<number[]> {
 
   return Promise.resolve(codes)
 }
+
+export async function revertUntrackedFiles(): Promise<number[]> {
+  const codes = []
+  const untrackedFiles = input.getUntrackedFilesInput()
+
+  for (const pattern of untrackedFiles) {
+    codes.push(await exec.exec('git restore --staged', [pattern]))
+    codes.push(await exec.exec('git checkout HEAD', [pattern]))
+  }
+
+  return Promise.resolve(codes)
+}

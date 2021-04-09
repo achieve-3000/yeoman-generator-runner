@@ -22,9 +22,9 @@ async function run(): Promise<void> {
     await git.add()
     core.info(`Files added`)
 
-    core.info(`Excluding tracked files`)
-    await git.excludeUntrackedFiles()
-    core.info(`Exclude configuration complete`)
+    core.info(`Ignoring untracked files`)
+    await git.revertUntrackedFiles()
+    core.info(`Ignore complete`)
 
     core.info(`Figuring out if files changed`)
     const filesChanged = await git.diffFiles()
