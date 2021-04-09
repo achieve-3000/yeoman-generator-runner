@@ -25,13 +25,13 @@ async function globFiles(pattern: string): Promise<string[]> {
 
 export async function configure(): Promise<number[]> {
   const config = input.getGitConfigInput()
-  const promises = []
+  const codes = []
 
   for (const [key, value] of Object.entries(config)) {
-    promises.push(exec.exec('git config --global', [key, value]))
+    codes.push(await exec.exec('git config --global', [key, value]))
   }
 
-  return Promise.all(promises)
+  return Promise.resolve(codes)
 }
 
 export async function diffFiles(): Promise<string[]> {
@@ -72,13 +72,15 @@ export async function pushGithubPrBranch(): Promise<number> {
 }
 
 export async function excludeUntrackedFiles(): Promise<number[]> {
+  const codes = []
   const untrackedFiles = input.getUntrackedFilesInput()
-  const promises = untrackedFiles.map(async pattern => {
+
+  for (const pattern of untrackedFiles) {
     const files = await globFiles(pattern)
     const result = await assumeUnchanged(pattern, files)
 
-    return result
-  })
+    codes.push(result)
+  }
 
-  return Promise.all(promises)
+  return Promise.resolve(codes)
 }
