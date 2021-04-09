@@ -42,10 +42,9 @@ inputs:
   git-remote-origin-url:
     description: 'Git remove origing url'
     required: false
-    default: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+    default: ''
   github-token:
     description: 'Github token'
-    default: '${{ secrets.GITHUB_TOKEN }}'
     required: true
   github-pr-commit-message:
     description: 'Message to use when commiting files that changed after the generator run'

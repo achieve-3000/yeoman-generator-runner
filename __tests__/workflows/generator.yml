@@ -18,8 +18,9 @@ jobs:
       with:
         generator: webapp
         package: generator-webapp
-        cwd: yeoman-generator-runner/examples/webapp
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        cwd: yeoman-generator-runner/examples/webapp
+        git-remote-origin-url: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         untracked-files: |
           [
             "app/**/*.js",
