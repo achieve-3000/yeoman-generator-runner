@@ -15,7 +15,7 @@ async function assumeUnchanged(
   }
 
   const command = 'git update-index --verbose --assume-unchanged'
-  const filter = (file: string): boolean => fs.lstatSync(file).isDirectory()
+  const filter = (file: string): boolean => fs.lstatSync(file).isFile()
 
   return exec.exec(command, files.filter(filter))
 }
