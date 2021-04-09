@@ -2,7 +2,6 @@ import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as glob from '@actions/glob'
 import * as input from './input'
-import * as path from 'path'
 import * as fs from 'fs'
 
 async function assumeUnchanged(
@@ -16,14 +15,9 @@ async function assumeUnchanged(
   }
 
   const command = 'git update-index --verbose --assume-unchanged'
-  const mapper = (file: string): string => {
-    const stat = fs.lstatSync(file)
-    const idDir = stat.isDirectory()
+  const filter = (file: string): boolean => fs.lstatSync(file).isDirectory()
 
-    return idDir ? path.join(file, '/') : file
-  }
-
-  return exec.exec(command, files.map(mapper))
+  return exec.exec(command, files.filter(filter))
 }
 
 async function globFiles(pattern: string): Promise<string[]> {
@@ -63,6 +57,7 @@ export async function diffFiles(): Promise<string[]> {
   await exec.exec(command, [], options)
 
   if (lines.length > 0) {
+    await exec.exec('git status')
     await exec.exec('git diff --stat HEAD .')
   }
 
