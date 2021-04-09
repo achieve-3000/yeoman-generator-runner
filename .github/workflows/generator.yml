@@ -1,7 +1,7 @@
 name: "generator"
+
 on:
-  repository_dispatch:
-    types: [generate]
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
 
