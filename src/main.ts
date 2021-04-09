@@ -18,6 +18,10 @@ async function run(): Promise<void> {
     await yeoman.run(yo)
     core.info(`Generator done`)
 
+    core.info(`Adding files to git`)
+    await git.add()
+    core.info(`Files added`)
+
     core.info(`Excluding tracked files`)
     await git.excludeUntrackedFiles()
     core.info(`Exclude configuration complete`)

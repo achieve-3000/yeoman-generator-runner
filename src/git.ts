@@ -64,9 +64,15 @@ export async function diffFiles(): Promise<string[]> {
   return lines
 }
 
-export async function commitChanges(): Promise<void> {
-  await exec.exec('git add .')
-  await exec.exec('git commit -m', [input.getGithubPrCommitMessageInput()])
+export async function add(): Promise<number> {
+  return exec.exec('git add .')
+}
+
+export async function commitChanges(): Promise<number> {
+  const command = 'git commit -m'
+  const message = input.getGithubPrCommitMessageInput()
+
+  return exec.exec(command, [message])
 }
 
 export async function createBranch(): Promise<number> {
