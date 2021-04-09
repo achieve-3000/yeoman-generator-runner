@@ -23,10 +23,8 @@ jobs:
         git-remote-origin-url: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         untracked-files: |
           [
-            "app/**/*.js",
-            "app/**/*.css",
-            "test/*.html",
-            "test/spec/*.js",
+            "app/*",
+            "test/*",
             "package.json"
           ]
         answers: |

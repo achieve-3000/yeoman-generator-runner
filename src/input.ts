@@ -27,7 +27,10 @@ export function getGithubPrCommitMessageInput(): string {
 }
 
 export function getGithubPrBranchInput(): string {
-  return getInput('github-pr-branch', `generator/${getInput('generator').replace(':', '/')}`)
+  return getInput(
+    'github-pr-branch',
+    `generator/${getInput('generator').replace(':', '/')}`
+  )
 }
 
 export function getGithubPrBodyInput(): string {
