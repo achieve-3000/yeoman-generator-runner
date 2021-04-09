@@ -62,6 +62,10 @@ export async function diffFiles(): Promise<string[]> {
 
   await exec.exec(command, [], options)
 
+  if (lines.length > 0) {
+    await exec.exec('git diff --stat HEAD .')
+  }
+
   return lines
 }
 
