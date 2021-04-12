@@ -5,7 +5,7 @@ export interface Params {
   generator: string
   packages?: string
   untrackedFiles: string[]
-  skipInstall: string
+  skipInstall: boolean
   answers: Answers
   options: Record<string, object>
   cwd: string
