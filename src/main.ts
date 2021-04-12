@@ -1,25 +1,29 @@
-import * as git from './git'
-import * as github from './github'
-import * as yeoman from './yeoman'
+import {GitAdapter} from './git'
+import {readParams} from './input'
+import {YeomanRunner} from './yeoman'
+import {GithubAdapter} from './github'
 import * as core from '@actions/core'
 
 async function run(): Promise<void> {
   try {
-    const yo = yeoman.createEnv()
+    const params = readParams()
+    const git = new GitAdapter(params)
+    const yo = new YeomanRunner(params)
+    const github = new GithubAdapter(params)
 
-    core.info(`Running yeoman in ${yo.cwd}`)
-    process.chdir(yo.cwd)
+    core.info(`Running yeoman in ${params.cwd}`)
+    process.chdir(params.cwd)
 
     core.info(`Instaling generator package`)
-    await yeoman.installDependencies(yo)
+    await yo.installDependencies()
     core.info(`Packages instaled`)
 
     core.info(`Running generator`)
-    await yeoman.run(yo)
+    await yo.run()
     core.info(`Generator done`)
 
     core.info(`Adding files to git`)
-    await git.add()
+    await git.addFiles()
     core.info(`Files added`)
 
     core.info(`Ignoring untracked files`)
@@ -31,16 +35,19 @@ async function run(): Promise<void> {
     const changed = filesChanged.length > 0
     core.info(`Files changed : ${filesChanged}`)
 
-    if (changed) {
-      await git.configure()
-      await git.createBranch()
-      await git.commitChanges()
-      await git.pushGithubPrBranch()
-      await github.openPullRequest()
-    }
-
     core.setOutput('changed', changed)
     core.setOutput('filesChanged', filesChanged)
+
+    if (!changed) {
+      core.info(`Found no changes`)
+      return
+    }
+
+    await git.configure()
+    await git.createBranch()
+    await git.commitChanges()
+    await git.pushGithubPrBranch()
+    await github.openPullRequest()
   } catch (error) {
     core.setFailed(error)
 

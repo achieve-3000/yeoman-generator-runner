@@ -1,8 +1,9 @@
 import * as core from '@actions/core'
 import * as exec from '@actions/exec'
 import * as glob from '@actions/glob'
-import * as input from './input'
 import * as fs from 'fs'
+
+import {Params} from './input'
 
 async function assumeUnchanged(
   pattern: string,
@@ -27,90 +28,98 @@ async function globFiles(pattern: string): Promise<string[]> {
   return result
 }
 
-export async function configure(): Promise<number[]> {
-  const originUrl = input.getInput('git-remote-origin-url')
-  const config = input.getGitConfigInput()
-  const codes = []
+export class GitAdapter {
+  params: Params
 
-  for (const [key, value] of Object.entries(config)) {
-    codes.push(await exec.exec('git config --global', [key, value]))
+  constructor(params: Params) {
+    this.params = params
   }
 
-  if (originUrl) {
-    codes.push(await exec.exec('git remote set-url origin', [originUrl]))
+  async configure(): Promise<number[]> {
+    const originUrl = this.params.gitRemoteOriginUrl
+    const config = this.params.gitConfig
+    const codes = []
+
+    for (const [key, value] of Object.entries(config)) {
+      codes.push(await exec.exec('git config --global', [key, value]))
+    }
+
+    if (originUrl) {
+      codes.push(await exec.exec('git remote set-url origin', [originUrl]))
+    }
+
+    return Promise.resolve(codes)
   }
 
-  return Promise.resolve(codes)
-}
-
-export async function diffFiles(): Promise<string[]> {
-  const lines: string[] = []
-  const command = 'git diff --name-only HEAD .'
-  const options = {
-    listeners: {
-      stdline: (line: string) => {
-        lines.push(line)
+  async diffFiles(): Promise<string[]> {
+    const lines: string[] = []
+    const command = 'git diff --name-only HEAD .'
+    const options = {
+      listeners: {
+        stdline: (line: string) => {
+          lines.push(line)
+        }
       }
     }
+
+    await exec.exec(command, [], options)
+
+    if (lines.length > 0) {
+      await exec.exec('git status')
+      await exec.exec('git diff --stat HEAD .')
+    }
+
+    return lines
   }
 
-  await exec.exec(command, [], options)
-
-  if (lines.length > 0) {
-    await exec.exec('git status')
-    await exec.exec('git diff --stat HEAD .')
+  async addFiles(): Promise<number> {
+    return exec.exec('git add .')
   }
 
-  return lines
-}
+  async commitChanges(): Promise<number> {
+    const command = 'git commit -m'
+    const message = this.params.githubPrCommitMessage
 
-export async function add(): Promise<number> {
-  return exec.exec('git add .')
-}
-
-export async function commitChanges(): Promise<number> {
-  const command = 'git commit -m'
-  const message = input.getGithubPrCommitMessageInput()
-
-  return exec.exec(command, [message])
-}
-
-export async function createBranch(): Promise<number> {
-  const command = 'git checkout -b'
-  const branch = input.getGithubPrBranchInput()
-
-  return exec.exec(command, [branch])
-}
-
-export async function pushGithubPrBranch(): Promise<number> {
-  const branch = input.getGithubPrBranchInput()
-  const command = 'git push origin'
-
-  return exec.exec(command, [branch, '--force'])
-}
-
-export async function excludeUntrackedFiles(): Promise<number[]> {
-  const codes = []
-  const untrackedFiles = input.getUntrackedFilesInput()
-
-  for (const pattern of untrackedFiles) {
-    const files = await globFiles(pattern)
-    const result = await assumeUnchanged(pattern, files)
-
-    codes.push(result)
+    return exec.exec(command, [message])
   }
 
-  return Promise.resolve(codes)
-}
+  async createBranch(): Promise<number> {
+    const command = 'git checkout -b'
+    const branch = this.params.githubPrBranch
 
-export async function revertUntrackedFiles(): Promise<number[]> {
-  const codes = []
-  const untrackedFiles = input.getUntrackedFilesInput()
-
-  for (const pattern of untrackedFiles) {
-    codes.push(await exec.exec('git restore --staged', [pattern]))
-    codes.push(await exec.exec('git checkout HEAD', [pattern]))
+    return exec.exec(command, [branch])
   }
 
-  return Promise.resolve(codes)
+  async pushGithubPrBranch(): Promise<number> {
+    const branch = this.params.githubPrBranch
+    const command = 'git push origin'
+
+    return exec.exec(command, [branch, '--force'])
+  }
+
+  async excludeUntrackedFiles(): Promise<number[]> {
+    const codes = []
+    const untrackedFiles = this.params.untrackedFiles
+
+    for (const pattern of untrackedFiles) {
+      const files = await globFiles(pattern)
+      const result = await assumeUnchanged(pattern, files)
+
+      codes.push(result)
+    }
+
+    return Promise.resolve(codes)
+  }
+
+  async revertUntrackedFiles(): Promise<number[]> {
+    const codes = []
+    const untrackedFiles = this.params.untrackedFiles
+
+    for (const pattern of untrackedFiles) {
+      codes.push(await exec.exec('git restore --staged', [pattern]))
+      codes.push(await exec.exec('git checkout HEAD', [pattern]))
+    }
+
+    return Promise.resolve(codes)
+  }
 }

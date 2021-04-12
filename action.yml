@@ -6,34 +6,34 @@ inputs:
     required: true
   package:
     description: 'Node package containing the yeoman generator'
-    required: true
+    required: false
   untracked-files:
     description: 'Contains files or directories to ignore'
     required: false
-    default: ''
+    default: '[]'
   skip-install:
     description: 'Do not automatically install dependencies'
-    required: true
+    required: false
     default: 'true'
   answers:
     description: 'Yeoman generator answers'
-    required: true
+    required: false
     default: '{}'
   options:
     description: 'Yeoman generator options'
-    required: true
+    required: false
     default: '{}'
   cwd:
     description: 'Yeoman working directory'
-    required: true
+    required: false
     default: '.'
   npm-sudo:
     description: 'Run npm as sudo'
-    required: true
+    required: false
     default: 'true'
   git-config:
     description: 'Git config'
-    required: true
+    required: false
     default: |
       {
         "user.name": "github-actions",
@@ -42,29 +42,26 @@ inputs:
   git-remote-origin-url:
     description: 'Git remove origing url'
     required: false
-    default: ''
   github-token:
     description: 'Github token'
     required: true
   github-pr-commit-message:
     description: 'Message to use when commiting files that changed after the generator run'
     required: false
-    default: ''
   github-pr-branch:
     description: 'Git branch used to submit a pr when changes are detected'
     required: false
-    default: ''
   github-pr-title:
     description: 'Github PR title used to submit changes'
     required: false
-    default: ''
   github-pr-body:
     description: 'Github PR body used to submit changes'
     required: false
-    default: ''
 outputs:
-  time: # output will be available to future steps
-    description: 'The message to output'
+  changed:
+    description: 'True if something changed'
+  filesChanged:
+    description: 'List of files that changed'
 runs:
   using: 'node12'
   main: 'dist/index.js'
