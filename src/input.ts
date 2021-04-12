@@ -1,10 +1,29 @@
 import * as core from '@actions/core'
+import {Answers} from 'inquirer'
 
-export function getInput(name: string, defaultValue = ''): string {
+export interface Params {
+  generator: string
+  packages?: string
+  untrackedFiles: string[]
+  skipInstall: string
+  answers: Answers
+  options: Record<string, object>
+  cwd: string
+  npmSudo: boolean
+  gitConfig: Record<string, string>
+  gitRemoteOriginUrl?: string
+  githubToken: string
+  githubPrCommitMessage: string
+  githubPrBranch: string
+  githubPrTitle: string
+  githubPrBody: string
+}
+
+function getInput(name: string, defaultValue = ''): string {
   return core.getInput(name) || defaultValue
 }
 
-export function getJsonInput<T>(name: string): T {
+function getJsonInput<T>(name: string): T {
   const input = getInput(name)
 
   try {
@@ -15,32 +34,44 @@ export function getJsonInput<T>(name: string): T {
   }
 }
 
-export function getGitConfigInput(): Record<string, string> {
-  return getJsonInput<Record<string, string>>('git-config')
-}
-
-export function getGithubPrCommitMessageInput(): string {
+function getGithubPrCommitMessageInput(): string {
   return getInput(
     'github-pr-commit-message',
     `Run generator ${getInput('generator')}`
   )
 }
 
-export function getGithubPrBranchInput(): string {
+function getGithubPrBranchInput(): string {
   return getInput(
     'github-pr-branch',
     `generator/${getInput('generator').replace(':', '/')}`
   )
 }
 
-export function getGithubPrBodyInput(): string {
+function getGithubPrBodyInput(): string {
   return getInput('github-pr-body', `Run generator ${getInput('generator')}`)
 }
 
-export function getGithubPrTitleInput(): string {
+function getGithubPrTitleInput(): string {
   return getInput('github-pr-title', `Run generator ${getInput('generator')}`)
 }
 
-export function getUntrackedFilesInput(): string[] {
-  return getJsonInput<string[]>('untracked-files')
+export function readParams(): Readonly<Params> {
+  return {
+    packages: getInput('package'),
+    generator: getInput('generator'),
+    untrackedFiles: getJsonInput('untracked-files'),
+    skipInstall: getJsonInput('skip-install'),
+    answers: getJsonInput('answers'),
+    options: getJsonInput('options'),
+    cwd: getInput('cwd'),
+    npmSudo: getJsonInput('npm-sudo'),
+    gitConfig: getJsonInput('git-config'),
+    gitRemoteOriginUrl: getInput('git-remote-origin-url'),
+    githubToken: getInput('github-token'),
+    githubPrCommitMessage: getGithubPrCommitMessageInput(),
+    githubPrBranch: getGithubPrBranchInput(),
+    githubPrTitle: getGithubPrTitleInput(),
+    githubPrBody: getGithubPrBodyInput()
+  }
 }
