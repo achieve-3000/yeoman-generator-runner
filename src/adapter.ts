@@ -34,8 +34,6 @@ export class StorageAdapter extends TerminalAdapter {
       throw new Error(`Unknow value for question ${name}`)
     }
 
-    return this.answers.hasOwnProperty(name)
-      ? this.answers[name]
-      : question.default
+    return this.answers.hasOwnProperty(name) ? this.answers[name] : question.default
   }
 }
