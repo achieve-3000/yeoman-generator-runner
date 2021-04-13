@@ -40,7 +40,7 @@
     "@types/js-yaml": "^4.0.0",
     "@types/node": "^14.14.9",
     "@types/yeoman-environment": "^2.10.2",
-    "@typescript-eslint/parser": "^4.8.1",
+    "@typescript-eslint/parser": "^4.22.0",
     "@vercel/ncc": "^0.28.3",
     "eslint": "^7.24.0",
     "eslint-plugin-github": "^4.1.1",
