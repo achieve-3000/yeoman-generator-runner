@@ -7,7 +7,7 @@ export interface Params {
   untrackedFiles: string[]
   skipInstall: boolean
   answers: Answers
-  options: Record<string, object>
+  options: object
   cwd: string
   npmSudo: boolean
   gitConfig: Record<string, string>
@@ -35,17 +35,11 @@ function getJsonInput<T>(name: string): T {
 }
 
 function getGithubPrCommitMessageInput(): string {
-  return getInput(
-    'github-pr-commit-message',
-    `Run generator ${getInput('generator')}`
-  )
+  return getInput('github-pr-commit-message', `Run generator ${getInput('generator')}`)
 }
 
 function getGithubPrBranchInput(): string {
-  return getInput(
-    'github-pr-branch',
-    `generator/${getInput('generator').replace(':', '/')}`
-  )
+  return getInput('github-pr-branch', `generator/${getInput('generator').replace(':', '/')}`)
 }
 
 function getGithubPrBodyInput(): string {

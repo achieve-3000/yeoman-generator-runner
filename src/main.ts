@@ -43,6 +43,8 @@ async function run(): Promise<void> {
       return
     }
 
+    await git.diffSummary()
+
     await git.configure()
     await git.createBranch()
     await git.commitChanges()

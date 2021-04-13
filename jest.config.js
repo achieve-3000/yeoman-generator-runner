@@ -1,5 +1,6 @@
 module.exports = {
   clearMocks: true,
+  preset: 'ts-jest',
   collectCoverage: true,
   moduleFileExtensions: ['js', 'ts'],
   coverageThreshold: {
@@ -11,10 +12,11 @@ module.exports = {
     }
   },
   testEnvironment: 'node',
-  testMatch: ['**/*.test.ts'],
   testRunner: 'jest-circus/runner',
   coverageDirectory: "<rootDir>/coverage/",
+  testMatch: ['**/*.test.ts', '**/*.test.js'],
   coverageReporters: ['text-summary', 'html'],
+  transformIgnorePatterns: ['^.+\\.js$'],
   transform: {
     '^.+\\.ts$': 'ts-jest'
   },
