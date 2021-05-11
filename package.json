@@ -42,7 +42,7 @@
     "@types/yeoman-environment": "^2.10.3",
     "@typescript-eslint/parser": "^4.23.0",
     "@vercel/ncc": "^0.28.5",
-    "eslint": "^7.25.0",
+    "eslint": "^7.26.0",
     "eslint-plugin-github": "^4.1.1",
     "eslint-plugin-jest": "^24.3.6",
     "husky": "^6.0.0",
