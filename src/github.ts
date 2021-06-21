@@ -40,7 +40,7 @@ export class GithubAdapter {
 
     core.info(`Trying to find existing pr using : ${JSON.stringify(params)}`)
 
-    const result: ListPullsResponse = await this.octokit.pulls.list(params)
+    const result: ListPullsResponse = await this.octokit.rest.pulls.list(params)
     const pull = result.data.find(d => d.head.ref === head && d.base.ref === base) as ListPullsDataItemResponse
 
     return pull
@@ -61,7 +61,7 @@ export class GithubAdapter {
 
     core.info(`Creating new pr using : ${JSON.stringify(params)}`)
 
-    const result: CreatePullResponse = await this.octokit.pulls.create(params)
+    const result: CreatePullResponse = await this.octokit.rest.pulls.create(params)
     const data: CreatePullDataResponse = result.data
 
     return data

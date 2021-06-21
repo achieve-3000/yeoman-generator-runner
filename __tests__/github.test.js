@@ -25,9 +25,11 @@ function createParams() {
 
 function createOctokit() {
   return {
-    pulls: {
-      create: jest.fn(),
-      list: jest.fn()
+    rest: {
+      pulls: {
+        create: jest.fn(),
+        list: jest.fn()
+      }
     }
   }
 }
@@ -69,14 +71,14 @@ test('GithubAdapter#createPull', async () => {
   const octokit = createOctokit()
 
   context.ref = 'refs/heads/main'
-  octokit.pulls.create.mockReturnValue(Promise.resolve(result))
+  octokit.rest.pulls.create.mockReturnValue(Promise.resolve(result))
 
   const params = createParams()
   const adapter = new GithubAdapter(params, octokit)
 
   expect(await adapter.createPull()).toBe(result.data)
 
-  expect(octokit.pulls.create).toHaveBeenCalledWith({
+  expect(octokit.rest.pulls.create).toHaveBeenCalledWith({
     base: 'main',
     body: 'Generator PR Body',
     head: 'generator/my-branch',
@@ -95,7 +97,7 @@ test('GithubAdapter#findOpenPull', async () => {
   }
 
   context.ref = 'refs/heads/main'
-  octokit.pulls.list.mockReturnValue(Promise.resolve(result))
+  octokit.rest.pulls.list.mockReturnValue(Promise.resolve(result))
 
   const params = createParams()
   const adapter = new GithubAdapter(params, octokit)
@@ -107,7 +109,7 @@ test('GithubAdapter#findOpenPull', async () => {
     base: {ref: 'main'}
   })
 
-  expect(octokit.pulls.list).toHaveBeenCalledWith({
+  expect(octokit.rest.pulls.list).toHaveBeenCalledWith({
     head: 'generator/my-branch',
     base: 'main',
     state: 'open'
@@ -122,21 +124,21 @@ test('GithubAdapter#openPullRequest new', async () => {
   }
 
   context.ref = 'refs/heads/main'
-  octokit.pulls.list.mockReturnValue(Promise.resolve(listResult))
-  octokit.pulls.create.mockReturnValue(Promise.resolve(createResult))
+  octokit.rest.pulls.list.mockReturnValue(Promise.resolve(listResult))
+  octokit.rest.pulls.create.mockReturnValue(Promise.resolve(createResult))
 
   const params = createParams()
   const adapter = new GithubAdapter(params, octokit)
 
   expect(await adapter.openPullRequest()).toBe(createResult.data.id)
 
-  expect(octokit.pulls.list).toHaveBeenCalledWith({
+  expect(octokit.rest.pulls.list).toHaveBeenCalledWith({
     head: 'generator/my-branch',
     base: 'main',
     state: 'open'
   })
 
-  expect(octokit.pulls.create).toHaveBeenCalledWith({
+  expect(octokit.rest.pulls.create).toHaveBeenCalledWith({
     base: 'main',
     body: 'Generator PR Body',
     head: 'generator/my-branch',
@@ -154,19 +156,19 @@ test('GithubAdapter#openPullRequest existing', async () => {
   ]}
 
   context.ref = 'refs/heads/main'
-  octokit.pulls.list.mockReturnValue(Promise.resolve(listResult))
-  octokit.pulls.create.mockReturnValue(Promise.resolve(createResult))
+  octokit.rest.pulls.list.mockReturnValue(Promise.resolve(listResult))
+  octokit.rest.pulls.create.mockReturnValue(Promise.resolve(createResult))
 
   const params = createParams()
   const adapter = new GithubAdapter(params, octokit)
 
   expect(await adapter.openPullRequest()).toBe(111)
 
-  expect(octokit.pulls.list).toHaveBeenCalledWith({
+  expect(octokit.rest.pulls.list).toHaveBeenCalledWith({
     head: 'generator/my-branch',
     base: 'main',
     state: 'open'
   })
 
-  expect(octokit.pulls.create).not.toBeCalled()
+  expect(octokit.rest.pulls.create).not.toBeCalled()
 })
