@@ -38,7 +38,7 @@
     "@types/inquirer": "^7.3.2",
     "@types/jest": "^26.0.23",
     "@types/js-yaml": "^4.0.1",
-    "@types/node": "^15.12.4",
+    "@types/node": "^16.4.1",
     "@types/yeoman-environment": "^2.10.3",
     "@typescript-eslint/parser": "^4.28.0",
     "@vercel/ncc": "^0.28.6",
