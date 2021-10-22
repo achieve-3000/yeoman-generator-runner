@@ -30,8 +30,7 @@ export class StorageAdapter extends TerminalAdapter {
   }
 
   private findAnswer<Q, A>(name: string, question: Question<Q>): A {
-    if (!this.answers.hasOwnProperty(name) && !question.default) {
-      this.console.log('findAnswer', name, question)
+    if (!this.answers.hasOwnProperty(name) && question.default === undefined) {
       throw new Error(`Unknow value for question ${name}`)
     }
 
