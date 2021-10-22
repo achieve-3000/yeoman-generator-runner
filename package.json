@@ -31,27 +31,27 @@
     "@actions/exec": "^1.1.0",
     "@actions/github": "^5.0.0",
     "@actions/glob": "^0.2.0",
-    "yeoman-environment": "^2.0.0"
+    "yeoman-environment": "^3.6.0"
   },
   "devDependencies": {
     "@octokit/plugin-rest-endpoint-methods": "^5.5.1",
     "@types/inquirer": "^7.3.2",
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.0.2",
     "@types/js-yaml": "^4.0.1",
     "@types/node": "^16.6.0",
-    "@types/yeoman-environment": "^2.10.4",
+    "@types/yeoman-environment": "^2.10.5",
     "@typescript-eslint/parser": "^4.28.0",
     "@vercel/ncc": "^0.28.6",
     "eslint": "^7.32.0",
     "eslint-plugin-github": "^4.1.5",
     "eslint-plugin-jest": "^24.4.0",
     "husky": "^6.0.0",
-    "jest": "^26.6.3",
     "is-svg": ">=4.2.2",
+    "jest": "^27.3.1",
     "jest-circus": "^27.0.6",
     "js-yaml": "^4.1.0",
     "prettier": "2.3.2",
-    "ts-jest": "^26.5.6",
+    "ts-jest": "^27.0.7",
     "typescript": "^4.3.4"
   }
 }
