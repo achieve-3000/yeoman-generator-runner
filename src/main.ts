@@ -51,7 +51,13 @@ async function run(): Promise<void> {
     await git.pushGithubPrBranch()
     await github.openPullRequest()
   } catch (error) {
-    core.setFailed(error)
+    if (error instanceof Error) {
+      core.setFailed(error)
+    }
+
+    if (error instanceof String) {
+      core.setFailed(Object.prototype.toString.call(error))
+    }
 
     throw error
   }
