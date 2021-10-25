@@ -1,0 +1,50 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-20.04
+    steps:
+    -
+      name: Checkout code
+      uses: actions/checkout@v2
+    -
+      name: Install dependencies
+      run: npm install
+    -
+      name: Run
+      run: npm run all
+
+  build:
+    name: build
+    needs: [ci]
+    runs-on: ubuntu-20.04
+    steps:
+    -
+      name: Checkout code
+      uses: actions/checkout@v2
+    -
+      name: Configure git
+      run: |
+        git config --local user.name "ci-a3k"
+        git config --local user.email "ci-a3k@users.noreply.github.com"
+        git remote set-url origin https://x-access-token:${{ secrets.CI_PAT }}@github.com/${{ github.repository }}
+    -
+      name: Install dependencies
+      run: npm install
+    -
+      name: Build
+      run: npm run build
+    -
+      name: Commit
+      run: |
+        git diff HEAD dist
+        git commit -m 'Build dist' -m 'Triggered by https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}' dist/
+    -
+      name: Push changes
+      run: git push origin HEAD:${{ github.ref }}
