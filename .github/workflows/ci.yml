@@ -31,6 +31,9 @@ jobs:
     -
       name: Checkout code
       uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+        token: ${{ secrets.CI_PAT }}
     -
       name: Configure git
       run: |
@@ -41,8 +44,8 @@ jobs:
       name: Install dependencies
       run: npm install
     -
-      name: Build
-      run: npm run build
+      name: Package
+      run: npm run build && npm run package
     -
       id: changes
       run: |
@@ -52,13 +55,12 @@ jobs:
       if: "${{ steps.changes.outputs.dist == 'changed' }}"
       run: |
         git diff HEAD dist/
-        git commit -m 'Build dist' -m 'Triggered by https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}' -- dist/
+        git commit -m "$(git log --format=%B -n 1 HEAD)" -m 'Build dist - triggered by https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}' -- dist/
     -
       name: Checkout head
       run: git checkout HEAD
       if: "${{ steps.changes.outputs.dist == 'changed' }}"
     -
       name: Push changes
-      run: git push origin HEAD:${{ github.ref }}
+      run: git push origin ${{ github.head_ref }}
       if: "${{ steps.changes.outputs.dist == 'changed' }}"
-
