@@ -1,7 +1,9 @@
-jest.mock('@actions/github');
+jest.mock('@actions/github')
 
-const {GithubAdapter} = require('../src/github');
 const {context, getOctokit} = require('@actions/github')
+const {GithubAdapter} = require('../src/github')
+
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 function createParams() {
   return {
@@ -34,12 +36,12 @@ function createOctokit() {
   }
 }
 
-function createPullEntry(id, base, head){
+function createPullEntry(id, base, head) {
   return {
-    id: id,
+    id,
     base: {ref: base},
     head: {ref: head},
-    html_url: `http://localhost/test/pr/${id}`,
+    html_url: `http://localhost/test/pr/${id}`
   }
 }
 
@@ -82,7 +84,7 @@ test('GithubAdapter#createPull', async () => {
     base: 'main',
     body: 'Generator PR Body',
     head: 'generator/my-branch',
-    title: 'Generator PR Body',
+    title: 'Generator PR Body'
   })
 })
 
@@ -92,7 +94,7 @@ test('GithubAdapter#findOpenPull', async () => {
     data: [
       createPullEntry(111, 'master', 'generator/my-branch'),
       createPullEntry(222, 'main', 'generator/my-branch'),
-      createPullEntry(333, 'master', 'generator/my-branch'),
+      createPullEntry(333, 'master', 'generator/my-branch')
     ]
   }
 
@@ -104,7 +106,7 @@ test('GithubAdapter#findOpenPull', async () => {
 
   expect(await adapter.findOpenPull()).toEqual({
     id: 222,
-    html_url: "http://localhost/test/pr/222",
+    html_url: 'http://localhost/test/pr/222',
     head: {ref: 'generator/my-branch'},
     base: {ref: 'main'}
   })
@@ -142,7 +144,7 @@ test('GithubAdapter#openPullRequest new', async () => {
     base: 'main',
     body: 'Generator PR Body',
     head: 'generator/my-branch',
-    title: 'Generator PR Body',
+    title: 'Generator PR Body'
   })
 })
 
@@ -151,9 +153,7 @@ test('GithubAdapter#openPullRequest existing', async () => {
   const createResult = {
     data: createPullEntry(222, 'main', 'generator/my-branch')
   }
-  const listResult = {data: [
-    createPullEntry(111, 'main', 'generator/my-branch')
-  ]}
+  const listResult = {data: [createPullEntry(111, 'main', 'generator/my-branch')]}
 
   context.ref = 'refs/heads/main'
   octokit.rest.pulls.list.mockReturnValue(Promise.resolve(listResult))

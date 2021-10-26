@@ -1,7 +1,9 @@
-jest.mock('@actions/exec');
+jest.mock('@actions/exec')
 
 const {exec} = require('@actions/exec')
 const {YeomanRunner} = require('../src/yeoman')
+
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 beforeEach(() => {
   exec.exec = jest.fn()
@@ -67,7 +69,7 @@ test('YeomanRunner#installDependencies', async () => {
 
 test('YeomanRunner#installDependencies no packages', async () => {
   const environment = createEnvironment()
-  const params = {... createParams(), packages: ''}
+  const params = {...createParams(), packages: ''}
   const runner = new YeomanRunner(params, environment, exec.exec)
 
   await runner.installDependencies()
@@ -77,7 +79,7 @@ test('YeomanRunner#installDependencies no packages', async () => {
 
 test('YeomanRunner#installDependencies no sudo', async () => {
   const environment = createEnvironment()
-  const params = {... createParams(), npmSudo: false}
+  const params = {...createParams(), npmSudo: false}
   const runner = new YeomanRunner(params, environment, exec.exec)
 
   await runner.installDependencies()
@@ -96,7 +98,7 @@ test('YeomanRunner#run resolve', async () => {
     expect(cb).toBeDefined()
 
     cb()
-  });
+  })
 
   await runner.run()
 
@@ -105,7 +107,7 @@ test('YeomanRunner#run resolve', async () => {
     {
       force: true,
       skipInstall: true,
-      my_options: 'my_value',
+      my_options: 'my_value'
     },
     expect.any(Function)
   )
@@ -117,7 +119,7 @@ test('YeomanRunner#run reject', async () => {
   const environment = createEnvironment()
   const runner = new YeomanRunner(params, environment, exec.exec)
 
-  expect.assertions(5);
+  expect.assertions(5)
 
   environment.run.mockImplementation((generator, options, cb) => {
     expect(generator).toBeDefined()
@@ -125,7 +127,7 @@ test('YeomanRunner#run reject', async () => {
     expect(cb).toBeDefined()
 
     cb(err)
-  });
+  })
 
   try {
     await runner.run()
@@ -138,9 +140,8 @@ test('YeomanRunner#run reject', async () => {
     {
       force: true,
       skipInstall: true,
-      my_options: 'my_value',
+      my_options: 'my_value'
     },
     expect.any(Function)
   )
 })
-

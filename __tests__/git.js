@@ -1,7 +1,9 @@
-jest.mock('@actions/exec');
+jest.mock('@actions/exec')
 
-const {exec} = require('@actions/exec')
 const {GitAdapter} = require('../src/git')
+const {exec} = require('@actions/exec')
+
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 beforeEach(() => {
   exec.exec = jest.fn()
@@ -56,7 +58,7 @@ test('GitAdapter#configure', async () => {
 })
 
 test('GitAdapter#configure with no origin', async () => {
-  const params = {... createParams(), gitRemoteOriginUrl: ''}
+  const params = {...createParams(), gitRemoteOriginUrl: ''}
   const adapter = new GitAdapter(params, exec.exec)
 
   expect(await adapter.configure()).toHaveLength(1)
@@ -88,8 +90,10 @@ test('GitAdapter#diffFiles', async () => {
     expect(options.listeners).toBeDefined()
     expect(options.listeners.stdline).toBeDefined()
 
-    lines.forEach(options.listeners.stdline)
-  });
+    for (const line of lines) {
+      options.listeners.stdline(line)
+    }
+  })
 
   expect(await adapter.diffFiles()).toEqual(lines)
 

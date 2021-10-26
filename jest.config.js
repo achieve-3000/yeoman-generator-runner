@@ -14,7 +14,6 @@ module.exports = {
   testEnvironment: 'node',
   testRunner: 'jest-circus/runner',
   coverageDirectory: "<rootDir>/coverage/",
-  testMatch: ['**/*.test.ts', '**/*.test.js'],
   coverageReporters: ['text-summary', 'html'],
   transformIgnorePatterns: ['^.+\\.js$'],
   transform: {
