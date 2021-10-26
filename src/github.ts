@@ -4,7 +4,10 @@ import {GitHub} from '@actions/github/lib/utils'
 import * as core from '@actions/core'
 import {context, getOctokit} from '@actions/github'
 
+/* eslint-disable import/named */
+// see https://github.com/octokit/rest.js/issues/35
 import {RestEndpointMethodTypes} from '@octokit/plugin-rest-endpoint-methods'
+/* eslint-enable import/named */
 
 type ListPullsResponse = RestEndpointMethodTypes['pulls']['list']['response']
 type CreatePullResponse = RestEndpointMethodTypes['pulls']['create']['response']

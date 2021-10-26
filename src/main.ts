@@ -53,12 +53,11 @@ async function run(): Promise<void> {
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error)
+
+      throw error
     }
 
-    if (error instanceof String) {
-      core.setFailed(Object.prototype.toString.call(error))
-    }
-
+    core.setFailed(`Failed to run generator : ${error}`)
     throw error
   }
 }
