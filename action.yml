@@ -30,7 +30,7 @@ inputs:
   npm-sudo:
     description: 'Run npm as sudo'
     required: false
-    default: 'true'
+    default: 'false'
   git-config:
     description: 'Git config'
     required: false

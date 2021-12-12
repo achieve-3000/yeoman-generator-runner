@@ -28,7 +28,7 @@ test('readParams defaults', () => {
     answers: {},
     options: {},
     cwd: '.',
-    npmSudo: true,
+    npmSudo: false,
     gitConfig: {
       'user.name': 'github-actions',
       'user.email': 'github-actions@github.com'
