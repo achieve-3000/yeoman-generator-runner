@@ -46,7 +46,7 @@ jobs:
     -
       id: changes
       run: |
-        echo ::set-output name=dist::$(git diff --quiet HEAD -- dist/ && echo unchanged || echo changed)
+        echo dist=$(git diff --quiet HEAD -- dist/ && echo unchanged || echo changed) >> $GITHUB_OUTPUT
     -
       name: Commit
       if: "${{ steps.changes.outputs.dist == 'changed' }}"
