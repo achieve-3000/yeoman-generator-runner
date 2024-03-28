@@ -1,4 +1,4 @@
-// generated on 2021-10-27 using generator-webapp 4.0.0-8
+// generated on 2024-03-28 using generator-webapp 4.0.0-9
 const { src, dest, watch, series, parallel, lastRun } = require('gulp');
 const gulpLoadPlugins = require('gulp-load-plugins');
 const browserSync = require('browser-sync');
